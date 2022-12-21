@@ -10,13 +10,13 @@ export type Channels =
   | 'mappingPK'
   | 'deleteFeature'
   | 'modifyFeatureDataType'
-  | 'mappingFK'
   | 'findTableJoinCandidate'
   | 'tableJoin'
   | 'tableJoinMany'
   | 'showResult'
   | 'downloadResult'
-  | 'isDBConnected';
+  | 'isDBConnected'
+  | 'readScanTable';
 
 contextBridge.exposeInMainWorld('db', {
   command: {

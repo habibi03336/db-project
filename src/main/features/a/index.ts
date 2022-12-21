@@ -4,6 +4,7 @@ import readTables from './a2/readTables';
 import scanTableFeature from './a2/scanTableFeature';
 import mappingFK from './a2/mappingFK';
 import mappingPK from './a2/mappingPK';
+import readScanTable from './a3/readScanTable';
 
 export default {
   makeConnection,
@@ -12,4 +13,5 @@ export default {
   scanTableFeature,
   mappingFK,
   mappingPK,
+  readScanTable,
 };
