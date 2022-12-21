@@ -1,0 +1,71 @@
+export const numericTableOrdering = ({
+  rowCount,
+  name,
+  typeCategory,
+  isFKcandidate,
+  nullCount,
+  type,
+  uniqueValueCount,
+  min,
+  max,
+  zeroCount,
+}) => [
+  name,
+  typeCategory,
+  type,
+  nullCount,
+  nullCount / rowCount,
+  zeroCount,
+  zeroCount / rowCount,
+  min,
+  max,
+  uniqueValueCount,
+  isFKcandidate,
+];
+
+export const numericTableOrder = [
+  '속성명',
+  '데이터 형식 분류',
+  '데이터 형식',
+  'null 개수',
+  'null 비율',
+  '0 개수',
+  '0 비율',
+  '최소',
+  '최대',
+  '상이 수치값',
+  '결합키 후보',
+];
+
+export const categoricTableOrdering = ({
+  name,
+  typeCategory,
+  isFKcandidate,
+  nullCount,
+  rowCount,
+  specialCharCount,
+  type,
+  uniqueCategoryCount,
+}) => [
+  name,
+  typeCategory,
+  type,
+  nullCount,
+  nullCount / rowCount,
+  specialCharCount,
+  specialCharCount / rowCount,
+  uniqueCategoryCount,
+  isFKcandidate,
+];
+
+export const categoricTableOrder = [
+  '속성명',
+  '데이터 형식 분류',
+  '데이터 형식',
+  'null 개수',
+  'null 비율',
+  '특수문자 포함 개수',
+  '특수문자 비율',
+  '상이 범주값',
+  '결합키 후보',
+];
