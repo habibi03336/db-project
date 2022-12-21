@@ -26,20 +26,20 @@
 
   - 공통
 
-    - [ ] 속성의 data type을 보여준다. (lib/findDataType)
+    - [x] 속성의 data type을 보여준다. (sql 기능 이용)
     - [ ] NULL 레코드 수, NULL 레코드 비율을 보여준다. (lib/nullCount)
-    - [ ] 중복되는 레코드 비율이 10% 미만인 속성을 결합 키 후보로 설정한다. (lib/findFKcandidate)
+    - [x] 중복되는 레코드 비율이 10% 미만인 속성을 결합 키 후보로 설정한다. (uniqueValueCount, uniqueCatogoryCount 활용하여 구현)
 
   - 수치 속성의 경우
 
-    - [ ] 상이 수치값을 보여준다. (lib/uniqueValueCount)
-    - [ ] 최소, 최대 값을 보여준다. (lib/minMax)
-    - [ ] 0레코드 수, 0 레코드 비율을 보여준다. (lib/zeroValueCount)
+    - [x] 상이 수치값을 보여준다. (lib/uniqueValueCount)
+    - [x] 최소, 최대 값을 보여준다. (lib/minMax)
+    - [x] 0레코드 수, 0 레코드 비율을 보여준다. (lib/zeroValueCount)
 
   - 범주 속성의 경우
 
-    - [ ] 상이 범주값을 보여준다. (lib/uniqueCategoryCount)
-    - [ ] “특수문자 포함 레코드 수”, “특수문자 포함 레코드 비율”을 보여준다. (lib/specialCharCount)
+    - [x] 상이 범주값을 보여준다. (lib/uniqueCategoryCount)
+    - [x] “특수문자 포함 레코드 수”, “특수문자 포함 레코드 비율”을 보여준다. (lib/specialCharCount)
 
 - [x] 결합 키 후보 속성과 표준 결합키 사전의 값을 매핑하고, 파일 데이터를 업데이트한다. (mappingFK)
 
