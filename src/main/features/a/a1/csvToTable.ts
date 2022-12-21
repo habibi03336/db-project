@@ -1,17 +1,11 @@
 import csv from 'csvtojson';
+import path from 'path';
 import { error, success } from '../../../lib/status';
 import dbClient from '../../../instance/dbClient';
 
 const isCsvFormat = (fullPath: string) => {
   const pathArray = fullPath.split('.');
   return pathArray[pathArray.length - 1] === 'csv';
-};
-
-const getPureFileName = (fullPath: string) => {
-  const filePath = fullPath.split('/');
-  const fileNameWithExtend = filePath[filePath.length - 1].split('.');
-  const pureFileName = fileNameWithExtend[fileNameWithExtend.length - 2];
-  return pureFileName;
 };
 
 const createTableCreateQuery = (tableName: string, headers: string[]) => {
@@ -35,13 +29,14 @@ export default function (ipcMain: Electron.IpcMain): void {
     // 컬럼 headers
     const headers = Object.keys(csvArrays[0]);
     // 파일이름을 테이블 이름으로 사용
-    const tableName = getPureFileName(arg[0]);
+    const tableName = path.basename(arg[0], '.csv');
 
     // 테이블 생성
     const createTableQuery = createTableCreateQuery(tableName, headers);
     try {
       await dbClient.sql(createTableQuery);
-    } catch {
+    } catch (e) {
+      console.log(e);
       return error('테이블 생성 중 오류가 생겼습니다.');
     }
 

@@ -1,5 +1,6 @@
 import mariadb from 'mariadb';
 import { app } from 'electron';
+import path from 'path';
 
 interface DBinfo {
   user: string;
@@ -19,9 +20,11 @@ class DBClient {
   }
 
   getFilePath() {
-    return `${app.getAppPath()}/data/${this.#dbInfo.host}-${
-      this.#dbInfo.port
-    }-${this.#dbInfo.database}`;
+    return path.join(
+      app.getAppPath(),
+      'data',
+      `${this.#dbInfo.host}-${this.#dbInfo.port}-${this.#dbInfo.database}`
+    );
   }
 
   isDBconnected() {

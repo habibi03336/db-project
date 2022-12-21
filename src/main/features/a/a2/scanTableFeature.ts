@@ -1,4 +1,5 @@
 import fs from 'fs/promises';
+import path from 'path';
 import dbClient from '../../../instance/dbClient';
 import { error, success } from '../../../lib/status';
 import minMax from './lib/minMax';
@@ -30,7 +31,7 @@ import zeroValueCount from './lib/zeroValueCount';
  * we can get those values using ./lib/*.ts (ex. ./lib/findDataType.ts)
  */
 const numericTypes = new Set(['int']);
-const categoricTypes = new Set(['text']);
+const categoricTypes = new Set(['text', 'varchar']);
 
 export default function (ipcMain: Electron.IpcMain): void {
   const channelName = 'scanTableFeature';
@@ -96,7 +97,7 @@ export default function (ipcMain: Electron.IpcMain): void {
         columns: columnsScanResults,
       };
       await fs.writeFile(
-        `${dbClient.getFilePath()}/scanTable/${tableName}.json`,
+        path.join(dbClient.getFilePath(), 'scanTable', `${tableName}.json`),
         JSON.stringify(result)
       );
       return success(result, '테이블 특성 스캔 성공');
