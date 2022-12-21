@@ -24,9 +24,6 @@ import zeroValueCount from './lib/zeroValueCount';
  * "number of unique values", "number of records including special characters", "mappingPK", "mappingFK"}]
  *
  * special characters means the characters except for alphabets, numbers, and korean characters
- * the information about mappingPK and mappingFK is written on json file in src/main/resources/tableMapping.json
- * format in json is
- * [{"table_name" : {"mappingPK" : {"attribute_name" : "representative_PK_name"}, "mappingFK" : {"attribute_name" : "representative_FK_name"}}}]
  * if the attribute is not mapped, the value of mappingPK and mappingFK is null
  * if the attribute is mapped, the value of mappingPK and mappingFK is the representative name of PK and FK
  *
@@ -42,12 +39,16 @@ export default function (ipcMain: Electron.IpcMain): void {
       const { tableName } = arg[0];
       let { rowCount } = arg[0];
       rowCount = Number(rowCount);
-      const sql = `SELECT COLUMN_NAME, DATA_TYPE 
-      FROM INFORMATION_SCHEMA.COLUMNS 
+      // sql query to get the table attributes
+      // {column_name, data_type}
+      const sql = `SELECT COLUMN_NAME, DATA_TYPE
+      FROM INFORMATION_SCHEMA.COLUMNS
       WHERE TABLE_NAME = '${tableName}'`;
       const res: Array<{ COLUMN_NAME: string; DATA_TYPE: string }> =
         await dbClient.sql(sql);
 
+      // get records for each attribute
+      // allColumnRecords = [[{column_name : value}, {column_name : value}, ...], [{column_name : value}, {column_name : value}, ...], ...]
       const columnsScanResults = [];
       const allColumnRecords = await Promise.all(
         res.map(({ COLUMN_NAME }) => {
@@ -56,9 +57,12 @@ export default function (ipcMain: Electron.IpcMain): void {
         })
       );
 
+      // get the feature of each attribute
       for (let i = 0; i < res.length; i += 1) {
         const { COLUMN_NAME, DATA_TYPE } = res[i];
         const columnScan: { [key: string]: string | number | boolean } = {};
+        // allColumnRecords[i] = [{column_name : value}, {column_name : value}, ...] ,all same column_name
+        // columnRecords = [value, value, ...]
         const columnRecords = allColumnRecords[i].map(
           (elem) => Object.values(elem)[0]
         );

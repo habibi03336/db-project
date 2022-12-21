@@ -15,6 +15,8 @@ export default function (ipcMain: Electron.IpcMain): void {
       const targetIndex = tableScanData.columns.findIndex(
         (column) => column.name === columnName
       );
+
+      const originalFK = tableScanData.columns[targetIndex].fk;
       tableScanData.columns[targetIndex].fk = FKname;
       await fs.writeFile(targetFilePath, JSON.stringify(tableScanData));
 
@@ -22,6 +24,15 @@ export default function (ipcMain: Electron.IpcMain): void {
       const FKfilePath = `${dbClient.getFilePath()}/tableByPK.json`;
       const buff = await fs.readFile(FKfilePath);
       const tableByPK = JSON.parse(buff.toString());
+      // delete tableName from tableByPK[originalFK] if originalFK is not null
+      // tableByPK = {PKname : [tableName1, tableName2, ...], ...}
+      if (originalFK !== null) {
+        const originalFKIndex = tableByPK[originalFK].findIndex(
+          (table) => table === tableName
+        );
+        tableByPK[originalFK].splice(originalFKIndex, 1);
+      }
+
       tableByPK[FKname].push(tableName);
       await fs.writeFile(FKfilePath, JSON.stringify(tableByPK));
 
