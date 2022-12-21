@@ -25,16 +25,21 @@ export default function (ipcMain: Electron.IpcMain): void {
       const buff = await fs.readFile(FKfilePath);
       const tableByPK = JSON.parse(buff.toString());
       // delete tableName from tableByPK[originalFK] if originalFK is not null
-      // tableByPK = {PKname : [tableName1, tableName2, ...], ...}
+      // tableByPK = {PKname : [[tableName1, columnName1], [tableName1, columnName2], [tableName2, columnName1], ...], ...}
       if (originalFK !== null) {
         const originalFKIndex = tableByPK[originalFK].findIndex(
-          (table) => table === tableName
+          (table) => table[0] === tableName && table[1] === columnName
         );
-        tableByPK[originalFK].splice(originalFKIndex, 1);
+        // if the table is not in tableByPK[originalFK], do nothing
+        if (originalFKIndex !== -1) {
+          tableByPK[originalFK].splice(originalFKIndex, 1);
+        }
       }
 
-      tableByPK[FKname].push(tableName);
-      await fs.writeFile(FKfilePath, JSON.stringify(tableByPK));
+      if (FKname !== null) {
+        tableByPK[FKname].push([tableName, columnName]);
+        await fs.writeFile(FKfilePath, JSON.stringify(tableByPK));
+      }
 
       return success();
     } catch (err) {

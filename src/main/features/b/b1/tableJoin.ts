@@ -1,7 +1,8 @@
 import dbClient from '../../../instance/dbClient';
 import { error, success } from '../../../lib/status';
 
-
+/**
+ *
 SELECT *
  FROM tableA
           INNER JOIN tableB
@@ -17,6 +18,8 @@ SELECT * FROM class.select_test
 INTO OUTFILE '/home/stricky/select_csv/select_test.csv'
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n';
+
+ */
 
 export default function (ipcMain: Electron.IpcMain): void {
   const channelName = 'tableJoin';
