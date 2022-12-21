@@ -2,10 +2,8 @@
 
 ## 파일 데이터
 
-![파일 데이터 구조](https://github.com/habibi03336/db-project/blob/master/fileData.png?raw=true)
-
 <p align="center">
-  <img src="/blob/master/fileData.png?raw=true" width="100%" title="파일 데이터 구조">
+  <img src="./blob/master/fileData.png?raw=true" width="100%" title="파일 데이터 구조">
 </p>
 
 1. 표준 대표속성 사전 & 해당 대표속성을 가지는 테이블
@@ -16,7 +14,7 @@
 
 ### A-1. SourceDB 관리
 
-- [ ] DB연결을 하고, 기본 파일 구조를 생성한다. (make connection)
+- [x] DB연결을 하고, 기본 파일 구조를 생성한다. (make connection)
 
 - [x] CSV 파일을 테이블로 업로드 한다. (csvToTable)
 
@@ -24,7 +22,7 @@
 
 - [x] DB에 저장된 테이블 목록을 표시한다. (readTables)
 
-- [ ] 특정 테이블의 속성을 스캔하여 결과값을 파일로 저장 및 반환한다. (scanTableFeature)
+- [x] 특정 테이블의 속성을 스캔하여 결과값을 파일로 저장 및 반환한다. (scanTableFeature)
 
   - 공통
 
@@ -43,7 +41,7 @@
     - [ ] 상이 범주값을 보여준다. (lib/uniqueCategoryCount)
     - [ ] “특수문자 포함 레코드 수”, “특수문자 포함 레코드 비율”을 보여준다. (lib/specialCharCount)
 
-- [ ] 결합 키 후보 속성과 표준 결합키 사전의 값을 매핑한다. (mappingFK)
+- [ ] 결합 키 후보 속성과 표준 결합키 사전의 값을 매핑하고, 파일 데이터를 업데이트한다. (mappingFK)
 
 - [ ] 대표 속성과 표준 대표속성을 매핑한다. (mappingPK)
 
