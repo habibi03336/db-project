@@ -41,7 +41,7 @@
     - [ ] 상이 범주값을 보여준다. (lib/uniqueCategoryCount)
     - [ ] “특수문자 포함 레코드 수”, “특수문자 포함 레코드 비율”을 보여준다. (lib/specialCharCount)
 
-- [ ] 결합 키 후보 속성과 표준 결합키 사전의 값을 매핑하고, 파일 데이터를 업데이트한다. (mappingFK)
+- [x] 결합 키 후보 속성과 표준 결합키 사전의 값을 매핑하고, 파일 데이터를 업데이트한다. (mappingFK)
 
 - [ ] 대표 속성과 표준 대표속성을 매핑한다. (mappingPK)
 
@@ -49,9 +49,9 @@
 
 - [ ] 스캔된 테이블 중 하나를 선택한다. (readScanTable)
 
-- [ ] 테이블의 속성을 삭제한다. (deleteFeature)
+- [x] 테이블의 속성을 삭제한다. (deleteFeature)
 
-- [ ] 테이블 속성의 타입을 변경한다. (modifyFeatureDataType)
+- [x] 테이블 속성의 타입을 변경한다. (modifyFeatureDataType)
 
 - [ ] 결합키 후보속성과 표준결합키 사전의 값을 매핑한다. (mappingFK) - 테이블 속성 도메인 스캔 기능 재활용
 
