@@ -3,7 +3,7 @@
 ## 파일 데이터
 
 <p align="center">
-  <img src="./blob/master/fileData.png?raw=true" width="100%" title="파일 데이터 구조">
+  <img src="./fileData.png?raw=true" width="100%" title="파일 데이터 구조">
 </p>
 
 1. 표준 대표속성 사전 & 해당 대표속성을 가지는 테이블
