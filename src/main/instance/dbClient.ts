@@ -1,16 +1,27 @@
 import mariadb from 'mariadb';
+import { app } from 'electron';
 
+interface DBinfo {
+  user: string;
+  host: string;
+  database: string;
+  password: string;
+  port: number;
+}
 class DBClient {
   #client: null | mariadb.Connection = null;
 
-  async connect(config: {
-    user: string;
-    host: string;
-    database: string;
-    password: string;
-    port: number;
-  }) {
+  #dbInfo: null | DBinfo;
+
+  async connect(config: DBinfo) {
+    this.#dbInfo = config;
     this.#client = await mariadb.createConnection(config);
+  }
+
+  getFilePath() {
+    return `${app.getAppPath()}/data/${this.#dbInfo.host}-${
+      this.#dbInfo.port
+    }-${this.#dbInfo.database}`;
   }
 
   isDBconnected() {

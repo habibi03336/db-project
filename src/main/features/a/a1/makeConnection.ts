@@ -1,5 +1,4 @@
 import fs from 'fs/promises';
-import { app } from 'electron';
 import checkFileExist from './lib/checkFileExist';
 import dbClient from '../../../instance/dbClient';
 import { error, success } from '../../../lib/status';
@@ -18,15 +17,13 @@ export default function makeConnection(ipcMain: Electron.IpcMain): void {
     try {
       const dbInfo = arg[0];
       await dbClient.connect(dbInfo);
-      const file = `${app.getAppPath()}/data/${dbInfo.host}-${dbInfo.port}-${
-        dbInfo.database
-      }/tableByPK.json`;
-      if (!(await checkFileExist(file))) {
-        const dirPath = file.split('/').slice(0, -1).join('/');
+      const checkFile = `${dbClient.getFilePath()}/tableByPK.json`;
+      if (!(await checkFileExist(checkFile))) {
+        const dirPath = dbClient.getFilePath();
         await fs.mkdir(dirPath, { recursive: true });
         await fs.mkdir(`${dirPath}/scanTable`);
         await fs.mkdir(`${dirPath}/join`);
-        await fs.writeFile(file, JSON.stringify(DEFAULT_FK_DATA));
+        await fs.writeFile(checkFile, JSON.stringify(DEFAULT_FK_DATA));
       }
       return success('db연결 성공');
     } catch (e) {

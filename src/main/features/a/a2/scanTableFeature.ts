@@ -1,6 +1,6 @@
+import fs from 'fs/promises';
 import dbClient from '../../../instance/dbClient';
 import { error, success } from '../../../lib/status';
-import findDataType from './lib/findDataType';
 import findFKcandidate from './lib/findFKcandidate';
 import minMax from './lib/minMax';
 import nullCount from './lib/nullCount';
@@ -33,25 +33,63 @@ import zeroValueCount from './lib/zeroValueCount';
  *
  * we can get those values using ./lib/*.ts (ex. ./lib/findDataType.ts)
  */
+const numericTypes = new Set(['int']);
+const categoricTypes = new Set(['text']);
+
 export default function (ipcMain: Electron.IpcMain): void {
   const channelName = 'scanTableFeature';
   ipcMain.handle(channelName, async (event, arg) => {
     try {
-      const tableName = arg[0];
-      const sqlStr = `SELECT * FROM ${tableName}`;
-      const res = await dbClient.sql(sqlStr);
+      const { tableName, rowCount } = arg[0];
+      const sql = `SELECT COLUMN_NAME, DATA_TYPE 
+      FROM INFORMATION_SCHEMA.COLUMNS 
+      WHERE TABLE_NAME = '${tableName}'`;
+      const res: Array<{ COLUMN_NAME: string; DATA_TYPE: string }> =
+        await dbClient.sql(sql);
 
-      const numberType = [];
-      const stringType = [];
-      //const tableMapping = require('../../../resources/tableMapping.json');
-      // if (res.length === 0) {
-      //   return error('해당 테이블에 데이터가 없습니다.');
-      // }
-      // else {
-      //
-      // }
+      const columnsScanResults = [];
+      const allColumnRecords = await Promise.all(
+        res.map(({ COLUMN_NAME }) => {
+          const sqlStr = `SELECT ${COLUMN_NAME} FROM ${tableName}`;
+          return dbClient.sql(sqlStr);
+        })
+      );
 
-      return success([numberType, stringType], '테이블 특성 스캔 성공');
+      for (let i = 0; i < res.length; i += 1) {
+        const { COLUMN_NAME, DATA_TYPE } = res[i];
+        const columnScan: { [key: string]: string } = {};
+        const columnRecords = allColumnRecords[0].map(
+          (elem) => Object.values(elem)[0]
+        );
+        columnScan.name = COLUMN_NAME;
+        columnScan.type = DATA_TYPE;
+        columnScan.nullCount = nullCount(columnRecords);
+        columnScan.isFKcandidate = findFKcandidate(columnRecords);
+        if (numericTypes.has(DATA_TYPE)) {
+          columnScan.typeCategory = 'numeric';
+          columnScan.zeroCount = zeroValueCount(columnRecords);
+          columnScan.uniqueValueCount = uniqueValueCount(columnRecords);
+          const { min, max } = minMax(columnRecords);
+          columnScan.min = min;
+          columnScan.max = max;
+        }
+        if (categoricTypes.has(DATA_TYPE)) {
+          columnScan.typeCategory = 'categoric';
+          columnScan.uniqueCategoryCount = uniqueCategoryCount(columnRecords);
+          columnScan.specialCharCount = specialCharCount(columnRecords);
+        }
+        columnsScanResults.push(columnScan);
+      }
+      const result = {
+        tableName,
+        rowCount,
+        columns: columnsScanResults,
+      };
+      await fs.writeFile(
+        `${dbClient.getFilePath()}/scanTable/${tableName}.json`,
+        JSON.stringify(result)
+      );
+      return success(result, '테이블 특성 스캔 성공');
     } catch {
       return error('테이블 특성 스캔 실패');
     }
