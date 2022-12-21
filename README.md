@@ -1,16 +1,22 @@
 # 데이터베이스 프로젝트 \[2022-2\]
 
-## 관리 파일 데이터
+## 파일 데이터
 
-1. 표준 결합키 사전
-2. 표준 대표족성 사전
-3. 테이블 스캔 결과
+![파일 데이터 구조](https://github.com/habibi03336/db-project/blob/master/fileData.png?raw=true)
+
+<p align="center">
+  <img src="/blob/master/fileData.png?raw=true" width="100%" title="파일 데이터 구조">
+</p>
+
+1. 표준 대표속성 사전 & 해당 대표속성을 가지는 테이블
+2. 테이블 스캔 결과
+3. 테이블 조인 결과
 
 ## 기능목록
 
 ### A-1. SourceDB 관리
 
-- [x] DB연결을 한다. (make connection)
+- [ ] DB연결을 하고, 기본 파일 구조를 생성한다. (make connection)
 
 - [x] CSV 파일을 테이블로 업로드 한다. (csvToTable)
 
@@ -42,6 +48,8 @@
 - [ ] 대표 속성과 표준 대표속성을 매핑한다. (mappingPK)
 
 ### A-3. 테이블 속성 편집
+
+- [ ] 스캔된 테이블 중 하나를 선택한다. (readScanTable)
 
 - [ ] 테이블의 속성을 삭제한다. (deleteFeature)
 
