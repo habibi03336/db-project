@@ -1,7 +1,6 @@
 import fs from 'fs/promises';
 import dbClient from '../../../instance/dbClient';
 import { error, success } from '../../../lib/status';
-import findFKcandidate from './lib/findFKcandidate';
 import minMax from './lib/minMax';
 import nullCount from './lib/nullCount';
 import specialCharCount from './lib/specialCharCount';
@@ -40,7 +39,9 @@ export default function (ipcMain: Electron.IpcMain): void {
   const channelName = 'scanTableFeature';
   ipcMain.handle(channelName, async (event, arg) => {
     try {
-      const { tableName, rowCount } = arg[0];
+      const { tableName } = arg[0];
+      let { rowCount } = arg[0];
+      rowCount = Number(rowCount);
       const sql = `SELECT COLUMN_NAME, DATA_TYPE 
       FROM INFORMATION_SCHEMA.COLUMNS 
       WHERE TABLE_NAME = '${tableName}'`;
@@ -57,14 +58,15 @@ export default function (ipcMain: Electron.IpcMain): void {
 
       for (let i = 0; i < res.length; i += 1) {
         const { COLUMN_NAME, DATA_TYPE } = res[i];
-        const columnScan: { [key: string]: string } = {};
-        const columnRecords = allColumnRecords[0].map(
+        const columnScan: { [key: string]: string | number | boolean } = {};
+        const columnRecords = allColumnRecords[i].map(
           (elem) => Object.values(elem)[0]
         );
+
         columnScan.name = COLUMN_NAME;
         columnScan.type = DATA_TYPE;
         columnScan.nullCount = nullCount(columnRecords);
-        columnScan.isFKcandidate = findFKcandidate(columnRecords);
+
         if (numericTypes.has(DATA_TYPE)) {
           columnScan.typeCategory = 'numeric';
           columnScan.zeroCount = zeroValueCount(columnRecords);
@@ -72,11 +74,15 @@ export default function (ipcMain: Electron.IpcMain): void {
           const { min, max } = minMax(columnRecords);
           columnScan.min = min;
           columnScan.max = max;
+          columnScan.isFKcandidate =
+            columnScan.uniqueValueCount / rowCount > 0.9;
         }
         if (categoricTypes.has(DATA_TYPE)) {
           columnScan.typeCategory = 'categoric';
           columnScan.uniqueCategoryCount = uniqueCategoryCount(columnRecords);
           columnScan.specialCharCount = specialCharCount(columnRecords);
+          columnScan.isFKcandidate =
+            columnScan.uniqueCategoryCount / rowCount > 0.9;
         }
         columnsScanResults.push(columnScan);
       }
@@ -90,7 +96,7 @@ export default function (ipcMain: Electron.IpcMain): void {
         JSON.stringify(result)
       );
       return success(result, '테이블 특성 스캔 성공');
-    } catch {
+    } catch (err) {
       return error('테이블 특성 스캔 실패');
     }
   });
