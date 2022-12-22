@@ -40,25 +40,37 @@ export default function (ipcMain: Electron.IpcMain): void {
       rowCount = Number(rowCount);
       // sql query to get the table attributes
       // {column_name, data_type}
-      const sql = `SELECT COLUMN_NAME, DATA_TYPE
-      FROM INFORMATION_SCHEMA.COLUMNS
-      WHERE TABLE_NAME = '${tableName}'`;
-      const res: Array<{ COLUMN_NAME: string; DATA_TYPE: string }> =
-        await dbClient.sql(sql);
+      // const sql = `SELECT Field, Type
+      // FROM INFORMATION_SCHEMA.COLUMNS
+      // WHERE TABLE_NAME = '${tableName}'`;
+      // const res: Array<{ Field: string; Type: string }> =
+      //   await dbClient.sql(sql);
+
+      const sql = `DESCRIBE ${tableName}`;
+      const attributes: Array<{ Field: string; Type: string }> = await dbClient.sql(
+        sql
+      );
+      // Type should be like 'int' or 'varchar', not 'int(11)' or 'varchar(255)'
+      // so we need to split the string
+      const res = attributes.map((attribute) => {
+        const { Field, Type } = attribute;
+        const type = Type.split('(')[0];
+        return { Field: Field, Type: type };
+      });
 
       // get records for each attribute
       // allColumnRecords = [[{column_name : value}, {column_name : value}, ...], [{column_name : value}, {column_name : value}, ...], ...]
       const columnsScanResults = [];
       const allColumnRecords = await Promise.all(
-        res.map(({ COLUMN_NAME }) => {
-          const sqlStr = `SELECT ${COLUMN_NAME} FROM ${tableName}`;
+        res.map(({ Field }) => {
+          const sqlStr = `SELECT ${Field} FROM ${tableName}`;
           return dbClient.sql(sqlStr);
         })
       );
 
       // get the feature of each attribute
       for (let i = 0; i < res.length; i += 1) {
-        const { COLUMN_NAME, DATA_TYPE } = res[i];
+        const { Field, Type } = res[i];
         const columnScan: { [key: string]: string | number | boolean } = {};
         // allColumnRecords[i] = [{column_name : value}, {column_name : value}, ...] ,all same column_name
         // columnRecords = [value, value, ...]
@@ -66,11 +78,11 @@ export default function (ipcMain: Electron.IpcMain): void {
           (elem) => Object.values(elem)[0]
         );
 
-        columnScan.name = COLUMN_NAME;
-        columnScan.type = DATA_TYPE;
+        columnScan.name = Field;
+        columnScan.type = Type;
         columnScan.nullCount = nullCount(columnRecords);
 
-        if (numericTypes.has(DATA_TYPE)) {
+        if (numericTypes.has(Type)) {
           columnScan.typeCategory = 'numeric';
           columnScan.zeroCount = zeroValueCount(columnRecords);
           columnScan.uniqueCount = uniqueValueCount(columnRecords);
