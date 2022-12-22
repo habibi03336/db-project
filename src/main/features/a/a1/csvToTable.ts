@@ -10,11 +10,13 @@ const isCsvFormat = (fullPath: string) => {
 
 const createTableCreateQuery = (tableName: string, headers: string[]) => {
   const columnQuerys = headers.map((header: string) => {
-    return `${header} VARCHAR (255)`;
+    return `${header} TEXT`;
   });
   return `CREATE TABLE ${tableName} (${columnQuerys.join(', ')});`;
 };
 
+// First make a table with all types as text
+// Then alter the table to change the types
 export default function (ipcMain: Electron.IpcMain): void {
   const channelName = 'csvToTable';
   ipcMain.handle(channelName, async (event, arg) => {
@@ -42,16 +44,51 @@ export default function (ipcMain: Electron.IpcMain): void {
 
     // row 데이터 insert
     try {
+      const isInteger = [];
+      for (let i = 0; i < headers.length; i += 1) {
+        isInteger.push(true);
+      }
       const quries = [];
       for (let i = 0; i < csvArrays.length; i += 1) {
         const columns = Object.keys(csvArrays[i]);
-        const values = Object.values(csvArrays[i]).map((val) => `'${val}'`);
+        const values = Object.values(csvArrays[i]).map((val, idx) => {
+          // if val is not an int, set isInteger to false
+          if (!Number.isInteger(Number(val))) {
+            isInteger[idx] = false;
+          }
+
+          return `'${val}'`;
+        });
         const query = `INSERT INTO ${tableName} ( ${columns.join(
           ', '
         )} ) VALUES ( ${values.join(', ')} )`;
         quries.push(query);
       }
       await Promise.all(quries.map((query) => dbClient.sql(query)));
+
+      // change the type of the column to integer if all values are integer
+      // can be determined by isInteger array
+      const res = await Promise.all(
+        headers.map(async (header, idx) => {
+          if (isInteger[idx]) {
+            // if all values are integer, change the type to integer
+            // add new column with int type
+            const addNewCol = `ALTER TABLE ${tableName} ADD ${headers[idx]}_int int`;
+            // update the new column with the old column
+            const updateNewCol = `UPDATE ${tableName} SET ${headers[idx]}_int = CAST(${headers[idx]} AS INT)`;
+            // drop the old column
+            const dropOldCol = `ALTER TABLE ${tableName} DROP ${headers[idx]}`;
+            // rename the new column
+            const renameNewCol = `ALTER TABLE ${tableName} CHANGE ${headers[idx]}_int ${headers[idx]} INT`;
+
+            await dbClient.sql(addNewCol);
+            await dbClient.sql(updateNewCol);
+            await dbClient.sql(dropOldCol);
+            await dbClient.sql(renameNewCol);
+          }
+          return null;
+        })
+      );
     } catch {
       return error('데이터 insert 중에 오류가 발생했습니다.');
     }

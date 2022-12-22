@@ -1,5 +1,6 @@
 import dbClient from '../../../instance/dbClient';
 import { error, success } from '../../../lib/status';
+import localDBclient from '../../../instance/localDBclient';
 
 export default function (ipcMain: Electron.IpcMain): void {
   const channelName = 'deleteFeature';

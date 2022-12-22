@@ -27,20 +27,27 @@ export default function (ipcMain: Electron.IpcMain): void {
       const checkType = `select data_type from ATTRIBUTES_OF_TABLE where TABLE_NAME = '${modTable}' and COLUMN_NAME = '${colName}'`;
       const res = await localDBclient.select(checkType);
       if (numericTypes.has(res[0].data_type)) {
-        // convert the column to text
-        const convertToText = `UPDATE ${modTable} SET ${colName} = CAST(${colName} AS CHAR) WHERE ${colName} IS NOT NULL`;
-        const res2 = await dbClient.sql(convertToText);
-        // change the data type of the column to text
-        const changeType = `ALTER TABLE ${modTable} MODIFY ${colName} TEXT`;
-        const res3 = await dbClient.sql(changeType);
+        // add new new column with text type
+        const addNewCol = `ALTER TABLE ${modTable} ADD ${colName}_text TEXT`;
+        await dbClient.sql(addNewCol);
+        // update the new column with the old column
+        const updateNewCol = `UPDATE ${modTable} SET ${colName}_text = CAST(${colName} AS CHAR)`;
+        // drop the old column
+        const dropOldCol = `ALTER TABLE ${modTable} DROP ${colName}`;
+        // rename the new column
+        const renameNewCol = `ALTER TABLE ${modTable} CHANGE ${colName}_text ${colName} TEXT`;
+        await dbClient.sql(updateNewCol);
+        await dbClient.sql(dropOldCol);
+        await dbClient.sql(renameNewCol);
+
         // update the data type of the column in ATTRIBUTES_OF_TABLE and following NUMERIC_ATTRIBUTES or CATEGORIC_ATTRIBUTES
         const updateType = `update ATTRIBUTES_OF_TABLE set data_type = 'text' where TABLE_NAME = '${modTable}' and COLUMN_NAME = '${colName}'`;
         // delete the column from NUMERIC_ATTRIBUTES and insert it into CATEGORIC_ATTRIBUTES
         const deleteNumeric = `delete from NUMERIC_ATTRIBUTES where TABLE_NAME = '${modTable}' and COLUMN_NAME = '${colName}'`;
         const insertCategoric = `insert into CATEGORIC_ATTRIBUTES values ('${modTable}', '${colName}', 0)`; // 0 means the column has no special characters because it is converted from numeric to text
-        const res4 = await localDBclient.sql(updateType);
-        const res5 = await localDBclient.sql(deleteNumeric);
-        const res6 = await localDBclient.sql(insertCategoric);
+        await localDBclient.sql(updateType);
+        await localDBclient.sql(deleteNumeric);
+        await localDBclient.sql(insertCategoric);
       } else {
         return error(
           "text values can't be converted to numeric in many cases, so it is not allowed"
