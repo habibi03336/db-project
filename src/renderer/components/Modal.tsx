@@ -12,14 +12,16 @@ const Modal = ({
 }) => {
   return (
     <ModalContainer style={{ display: show ? '' : 'none' }}>
-      <Row
-        style={{ justifyContent: 'flex-end', fontSize: '2rem' }}
-        onClick={onClose}
-      >
-        {' '}
-        X
-      </Row>
-      {show && <ModalBody>{children}</ModalBody>}
+      <ModalBody>
+        <Row
+          style={{ justifyContent: 'flex-end', fontSize: '2rem' }}
+          onClick={onClose}
+        >
+          {' '}
+          X
+        </Row>
+        {children}
+      </ModalBody>
     </ModalContainer>
   );
 };

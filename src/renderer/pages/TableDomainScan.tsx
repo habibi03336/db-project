@@ -59,13 +59,6 @@ const TableDomainScan = () => {
   return (
     <Wrapper>
       <Modal show={showResult} onClose={() => setShowResult(false)}>
-        <Row
-          style={{ justifyContent: 'flex-end', fontSize: '2rem' }}
-          onClick={() => setShowResult(false)}
-        >
-          {' '}
-          X
-        </Row>
         {scanResult.numricColumnsResult.length > 0 && (
           <Row>
             수치 속성

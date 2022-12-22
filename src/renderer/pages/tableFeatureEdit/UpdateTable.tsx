@@ -9,7 +9,14 @@ import {
   numericTableOrder,
   numericTableOrdering,
 } from 'renderer/constants/scanResultTableOrder';
-import { Button, Column, Row, Strong, Wrapper } from 'renderer/CSScontainers';
+import {
+  BorderBox,
+  Button,
+  Column,
+  Row,
+  Strong,
+  Wrapper,
+} from 'renderer/CSScontainers';
 import DBstate from 'renderer/states/DBstate';
 import Selection from 'renderer/components/Selection';
 
@@ -53,7 +60,7 @@ const UpdateTable = () => {
       selectedAttr,
     ]);
     if (!res.status) return;
-
+    setSelectedAttr(null);
     setReload(reload + 1);
   };
 
@@ -64,7 +71,7 @@ const UpdateTable = () => {
       newType,
     ]);
     if (!res.status) return;
-
+    setSelectedAttr(null);
     setReload(reload + 1);
   };
 
@@ -73,6 +80,7 @@ const UpdateTable = () => {
       { tableName, columnName: selectedAttr, FKname: fk },
     ]);
     if (!res.status) return;
+    setSelectedAttr(null);
     setReload(reload + 1);
   };
 
@@ -107,26 +115,32 @@ const UpdateTable = () => {
           </Row>
         </Column>
       </Modal>
-      {scanResult.numericColumnsResult.length > 0 && (
-        <Row>
-          수치 속성
-          <Table
-            headers={numericTableOrder}
-            rows={scanResult.numericColumnsResult}
-            onClickRow={onClickRow}
-          />
-        </Row>
-      )}
-      {scanResult.categoricColumnsResult.length > 0 && (
-        <Row>
-          범주 속성
-          <Table
-            headers={categoricTableOrder}
-            rows={scanResult.categoricColumnsResult}
-            onClickRow={onClickRow}
-          />
-        </Row>
-      )}
+      <Column>
+        {scanResult.numericColumnsResult.length > 0 && (
+          <Row>
+            <BorderBox>
+              수치 속성
+              <Table
+                headers={numericTableOrder}
+                rows={scanResult.numericColumnsResult}
+                onClickRow={onClickRow}
+              />
+            </BorderBox>
+          </Row>
+        )}
+        {scanResult.categoricColumnsResult.length > 0 && (
+          <Row>
+            <BorderBox>
+              범주 속성
+              <Table
+                headers={categoricTableOrder}
+                rows={scanResult.categoricColumnsResult}
+                onClickRow={onClickRow}
+              />
+            </BorderBox>
+          </Row>
+        )}
+      </Column>
     </Wrapper>
   );
 };
