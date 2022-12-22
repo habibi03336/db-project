@@ -27,10 +27,7 @@ const Table = ({
       </TableHead>
       <TableBody>
         {rows.map((row) => (
-          <TableRow
-            key={row[0]}
-            onClick={() => onClickRow({ attrName: row[0] })}
-          >
+          <TableRow key={row[0]} onClick={() => onClickRow(row)}>
             <TableTh>{row[0]}</TableTh>
             {row.slice(1).map((data, idx) => {
               let showingData = data;

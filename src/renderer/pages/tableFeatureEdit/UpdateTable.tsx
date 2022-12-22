@@ -27,11 +27,11 @@ const UpdateTable = () => {
     categoricColumnsResult: [],
     numericColumnsResult: [],
   });
-  const [selectedAttr, setSelectedAttr] = useState(null);
+  const [selectedAttr, setSelectedAttr] = useState([]);
   const [reload, setReload] = useState(1);
 
-  const onClickRow = ({ attrName }) => {
-    setSelectedAttr(attrName);
+  const onClickRow = (row) => {
+    setSelectedAttr(row);
   };
   useEffect(() => {
     (async () => {
@@ -57,7 +57,7 @@ const UpdateTable = () => {
   const onDeleteFeature = async () => {
     const res = await db.command.request('deleteFeature', [
       tableName,
-      selectedAttr,
+      selectedAttr[0],
     ]);
     if (!res.status) return;
     setSelectedAttr(null);
@@ -67,7 +67,7 @@ const UpdateTable = () => {
   const onChangeType = async (newType) => {
     const res = await db.command.request('modifyFeatureDataType', [
       tableName,
-      selectedAttr,
+      selectedAttr[0],
       newType,
     ]);
     if (!res.status) return;
@@ -77,7 +77,7 @@ const UpdateTable = () => {
 
   const onSelectFK = async (fk) => {
     const res = await db.command.request('mappingFK', [
-      { tableName, columnName: selectedAttr, FKname: fk },
+      { tableName, columnName: selectedAttr[0], FKname: fk },
     ]);
     if (!res.status) return;
     setSelectedAttr(null);
@@ -87,14 +87,14 @@ const UpdateTable = () => {
   return (
     <Wrapper>
       <Modal
-        show={selectedAttr !== null}
+        show={selectedAttr.length !== 0}
         onClose={() => {
-          setSelectedAttr(null);
+          setSelectedAttr([]);
         }}
       >
         <Column style={{ width: '100%' }}>
           <Row>
-            <Strong>{selectedAttr}</Strong>
+            <Strong>{selectedAttr[0]}</Strong>
           </Row>
           <Row>
             <Button onClick={onDeleteFeature}>속성 삭제하기</Button>
@@ -102,7 +102,9 @@ const UpdateTable = () => {
           <Row>
             <Selection
               description="속성 변경하기"
-              options={['varchar', 'text', 'enum']}
+              options={
+                selectedAttr[1] === 'numeric' ? ['text', 'varchar'] : ['int']
+              }
               onChange={onChangeType}
             />
           </Row>
