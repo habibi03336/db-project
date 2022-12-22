@@ -60,7 +60,7 @@ const UpdateTable = () => {
       selectedAttr[0],
     ]);
     if (!res.status) return;
-    setSelectedAttr(null);
+    setSelectedAttr([]);
     setReload(reload + 1);
   };
 
@@ -71,7 +71,7 @@ const UpdateTable = () => {
       newType,
     ]);
     if (!res.status) return;
-    setSelectedAttr(null);
+    setSelectedAttr([]);
     setReload(reload + 1);
   };
 
@@ -80,7 +80,7 @@ const UpdateTable = () => {
       { tableName, columnName: selectedAttr[0], FKname: fk },
     ]);
     if (!res.status) return;
-    setSelectedAttr(null);
+    setSelectedAttr([]);
     setReload(reload + 1);
   };
 

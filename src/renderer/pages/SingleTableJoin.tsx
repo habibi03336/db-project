@@ -23,7 +23,10 @@ const SingleTableJoin = () => {
 
   useEffect(() => {
     (async () => {
-      if (search === '') return;
+      if (search === '') {
+        setTables([]);
+        return;
+      }
       const res = await db.command.request('searchScanTables', [search]);
       if (!res.status) return;
       setTables(res.data);
@@ -127,8 +130,12 @@ const SingleTableJoin = () => {
           </Row>
         )}
       </Modal>
-      <Row>
-        <Input onChange={(e) => setSearch(e.target.value)} />
+      <Row style={{ alignItems: 'center' }}>
+        테이블 검색:{' '}
+        <Input
+          style={{ minHeight: '20px' }}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </Row>
       <Row>
         {tables.map((table) => {
