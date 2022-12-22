@@ -29,4 +29,4 @@ npm-debug.log.*
 *.scss.d.ts
 
 data/databases
-dummy/
+dummy/!/data/databases/

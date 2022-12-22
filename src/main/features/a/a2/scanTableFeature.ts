@@ -7,6 +7,7 @@ import specialCharCount from './lib/specialCharCount';
 import uniqueCategoryCount from './lib/uniqueCategoryCount';
 import uniqueValueCount from './lib/uniqueValueCount';
 import zeroValueCount from './lib/zeroValueCount';
+import numericTypes from '../../../resources/numericTypes';
 
 // Show features of the table
 // arg[0] : table name
@@ -29,19 +30,6 @@ import zeroValueCount from './lib/zeroValueCount';
  *
  * we can get those values using ./lib/*.ts (ex. ./lib/findDataType.ts)
  */
-const numericTypes = new Set([
-  'int',
-  'tinyint',
-  'smallint',
-  'mediumint',
-  'float',
-  'double',
-  'decimal',
-  'numeric',
-  'real',
-  'bit',
-  'boolean',
-]);
 
 export default function (ipcMain: Electron.IpcMain): void {
   const channelName = 'scanTableFeature';
