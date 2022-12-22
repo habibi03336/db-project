@@ -13,7 +13,7 @@ export const Main = styled.div`
 export const SideBar = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 200px;
+  width: 250px;
   border-right: 2px solid gray;
   height: 100%;
 `;
@@ -78,9 +78,18 @@ export const Row = styled.div`
   flex-direction: row;
 `;
 
-export const Input = styled.input``;
+export const Input = styled.input`
+  min-height: 30px;
+  padding: 5px;
+  margin: 2px;
+  border-radius: 5px;
+`;
 
-export const Button = styled.button``;
+export const Button = styled.button`
+  min-height: 40px;
+  margin: 2px;
+  border-radius: 5px;
+`;
 export const ErrorMessage = styled.div`
   opacity: 0;
   color: tomato;

@@ -15,6 +15,7 @@ import {
   ListItem,
   Main,
   Center,
+  BorderBox,
 } from './CSScontainers';
 import isLoginState from './states/isLogin';
 import Login from './pages/Login';
@@ -38,23 +39,31 @@ export default function App() {
             <ConnectionStatus />
           </ListItem>
           <ListItem>
-            <Link to="/uploadCsv">CSV업로드</Link>
+            <Link to="/uploadCsv">
+              <BorderBox>CSV업로드</BorderBox>
+            </Link>
           </ListItem>
           <ListItem>
-            <Link to="/tableDomainScan">테이블 도메인 스캔</Link>
+            <Link to="/tableDomainScan">
+              <BorderBox>테이블 도메인 스캔</BorderBox>
+            </Link>
           </ListItem>
           <ListItem>
-            <Link to="/tableFeatureEdit">테이블 속성 편집</Link>
+            <Link to="/tableFeatureEdit">
+              <BorderBox>테이블 속성 편집</BorderBox>
+            </Link>
           </ListItem>
           <ListItem>
-            <Link to="/singleTableJoin">단일 결합</Link>
+            <Link to="/singleTableJoin">
+              <BorderBox>단일 결합</BorderBox>
+            </Link>
           </ListItem>
-          <ListItem>
+          {/* <ListItem>
             <Link to="/multipleTableJoin">다중 결합</Link>
           </ListItem>
           <ListItem>
             <Link to="/result">결과 조회</Link>
-          </ListItem>
+          </ListItem> */}
         </List>
       </SideBar>
       <Main>
