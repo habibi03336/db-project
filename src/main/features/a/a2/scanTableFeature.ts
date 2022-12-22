@@ -1,5 +1,4 @@
-import fs from 'fs/promises';
-import path from 'path';
+import localDBclient from '../../../instance/localDBclient';
 import dbClient from '../../../instance/dbClient';
 import { error, success } from '../../../lib/status';
 import minMax from './lib/minMax';
@@ -75,19 +74,17 @@ export default function (ipcMain: Electron.IpcMain): void {
         if (numericTypes.has(DATA_TYPE)) {
           columnScan.typeCategory = 'numeric';
           columnScan.zeroCount = zeroValueCount(columnRecords);
-          columnScan.uniqueValueCount = uniqueValueCount(columnRecords);
+          columnScan.uniqueCount = uniqueValueCount(columnRecords);
           const { min, max } = minMax(columnRecords);
           columnScan.min = min;
           columnScan.max = max;
-          columnScan.isFKcandidate =
-            columnScan.uniqueValueCount / rowCount > 0.9;
+          columnScan.isFKcandidate = columnScan.uniqueCount / rowCount > 0.9;
         }
         if (categoricTypes.has(DATA_TYPE)) {
           columnScan.typeCategory = 'categoric';
-          columnScan.uniqueCategoryCount = uniqueCategoryCount(columnRecords);
+          columnScan.uniqueCount = uniqueCategoryCount(columnRecords);
           columnScan.specialCharCount = specialCharCount(columnRecords);
-          columnScan.isFKcandidate =
-            columnScan.uniqueCategoryCount / rowCount > 0.9;
+          columnScan.isFKcandidate = columnScan.uniqueCount / rowCount > 0.9;
         }
         columnsScanResults.push(columnScan);
       }
@@ -96,13 +93,58 @@ export default function (ipcMain: Electron.IpcMain): void {
         rowCount,
         columns: columnsScanResults,
       };
-      await fs.writeFile(
-        path.join(dbClient.getFilePath(), 'scanTable', `${tableName}.json`),
-        JSON.stringify(result)
-      );
+
+      const checkExistSql = `select * from SCANNED_TABLE where table_name = '${tableName}'`;
+      const checkRow = (await localDBclient.select(
+        checkExistSql
+      )) as Array<any>;
+      if (checkRow.length !== 0) {
+        const deleteSql = `delete from SCANNED_TABLE where table_name = '${tableName}'`;
+        await localDBclient.sql(deleteSql);
+      }
+
+      const insertNewTableSql = `insert into SCANNED_TABLE values('${tableName}', ${rowCount})`;
+      await localDBclient.sql(insertNewTableSql);
+
+      const sqls = [];
+      for (let i = 0; i < columnsScanResults.length; i += 1) {
+        const attribute = columnsScanResults[i];
+        const insertAttributesSql = `insert into ATTRIBUTES_OF_TABLES values ('${tableName}', '${attribute.name}', '${attribute.type}', null, null, ${attribute.nullCount}, ${attribute.uniqueCount})`;
+        sqls.push(insertAttributesSql);
+        if (attribute.typeCategory === 'numeric') {
+          const numericInsertSql = `insert into NUMERIC_ATTRIBUTES values ('${tableName}', '${attribute.name}', ${attribute.max}, ${attribute.min}, ${attribute.zeroCount})`;
+          sqls.push(numericInsertSql);
+        }
+        if (attribute.typeCategory === 'categoric') {
+          const categoricInsertSql = `insert into CATEGORIC_ATTRIBUTES values ('${tableName}', '${attribute.name}', ${attribute.specialCharCount})`;
+          sqls.push(categoricInsertSql);
+        }
+      }
+      await Promise.all(sqls.map((elem) => localDBclient.sql(elem)));
+
       return success(result, '테이블 특성 스캔 성공');
     } catch (err) {
       return error('테이블 특성 스캔 실패');
     }
   });
 }
+
+// 이미 존재하는 경우
+// if (isExist) {
+//   const sqls = [];
+//   for (let i = 0; i < columnsScanResults.length; i += 1) {
+//     const attribute = columnsScanResults[i];
+//     // 컬럼 추가 시 예외처리
+//     const insertAttributesSql = `update ATTRIBUTES_OF_TABLES set data_type = ${attribute.type}, #_of_NULL_records = ${attribute.nullCount}, #_of_distinct_record = ${attribute.uniqueCount} where table_name = ${tableName} and attribute_name=${attribute.name}`;
+//     sqls.push(insertAttributesSql);
+//     if (attribute.typeCategory === 'numeric') {
+//       const numericInsertSql = `update NUMERIC_ATTRIBUTES set ${attribute.max}, ${attribute.min}, ${attribute.zeroCount} where table_name = ${tableName} and attribute_name=${attribute.name}`;
+//       sqls.push(numericInsertSql);
+//     }
+//     if (attribute.typeCategory === 'categoric') {
+//       const categoricInsertSql = `update CATEGORIC_ATTRIBUTES (${tableName}, ${attribute.name}, ${attribute.specialCharCount}) where table_name = ${tableName} and attribute_name=${attribute.name}`;
+//       sqls.push(categoricInsertSql);
+//     }
+//   }
+//   await Promise.all(sqls.map((elem) => localDBclient.sql(elem)));
+// }

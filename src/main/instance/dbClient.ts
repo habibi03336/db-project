@@ -23,7 +23,8 @@ class DBClient {
     return path.join(
       app.getAppPath(),
       'data',
-      `${this.#dbInfo.host}-${this.#dbInfo.port}-${this.#dbInfo.database}`
+      'databases',
+      `${this.#dbInfo.host}-${this.#dbInfo.port}-${this.#dbInfo.database}.db`
     );
   }
 
