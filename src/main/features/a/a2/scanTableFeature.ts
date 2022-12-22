@@ -29,8 +29,19 @@ import zeroValueCount from './lib/zeroValueCount';
  *
  * we can get those values using ./lib/*.ts (ex. ./lib/findDataType.ts)
  */
-const numericTypes = new Set(['int']);
-const categoricTypes = new Set(['text', 'varchar']);
+const numericTypes = new Set([
+  'int',
+  'tinyint',
+  'smallint',
+  'mediumint',
+  'float',
+  'double',
+  'decimal',
+  'numeric',
+  'real',
+  'bit',
+  'boolean',
+]);
 
 export default function (ipcMain: Electron.IpcMain): void {
   const channelName = 'scanTableFeature';
@@ -79,8 +90,7 @@ export default function (ipcMain: Electron.IpcMain): void {
           columnScan.min = min;
           columnScan.max = max;
           columnScan.isFKcandidate = columnScan.uniqueCount / rowCount > 0.9;
-        }
-        if (categoricTypes.has(DATA_TYPE)) {
+        } else {
           columnScan.typeCategory = 'categoric';
           columnScan.uniqueCount = uniqueCategoryCount(columnRecords);
           columnScan.specialCharCount = specialCharCount(columnRecords);
@@ -99,8 +109,14 @@ export default function (ipcMain: Electron.IpcMain): void {
         checkExistSql
       )) as Array<any>;
       if (checkRow.length !== 0) {
-        const deleteSql = `delete from SCANNED_TABLE where table_name = '${tableName}'`;
-        await localDBclient.sql(deleteSql);
+        const deleteSql1 = `delete from SCANNED_TABLE where table_name = '${tableName}'`;
+        const deleteSql2 = `delete from ATTRIBUTES_OF_TABLES where table_name = '${tableName}'`;
+        const deleteSql3 = `delete from NUMERIC_ATTRIBUTES where table_name = '${tableName}'`;
+        const deleteSql4 = `delete from CATEGORIC_ATTRIBUTES where table_name = '${tableName}'`;
+        await localDBclient.sql(deleteSql1);
+        await localDBclient.sql(deleteSql2);
+        await localDBclient.sql(deleteSql3);
+        await localDBclient.sql(deleteSql4);
       }
 
       const insertNewTableSql = `insert into SCANNED_TABLE values('${tableName}', ${rowCount})`;

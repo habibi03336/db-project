@@ -13,7 +13,11 @@ export default function makeConnection(ipcMain: Electron.IpcMain): void {
       const dbInfo = arg[0];
       await dbClient.connect(dbInfo);
       if (!(await checkFileExist(dbClient.getFilePath()))) {
-        await fs.mkdir(path.join(app.getAppPath(), 'data', 'databases'));
+        // if the directory does not exist, create it
+
+        await fs.mkdir(path.join(app.getAppPath(), 'data', 'databases'), {
+          recursive: true,
+        });
         await fs.copyFile(
           path.join(app.getAppPath(), 'data', 'default.db'),
           dbClient.getFilePath()
