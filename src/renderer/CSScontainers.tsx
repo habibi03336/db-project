@@ -1,21 +1,29 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
+export const ViewPort = styled.div`
   margin: 0;
   height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: row;
 `;
+
+export const Wrapper = styled.div`
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+`;
 export const Main = styled.div`
+  overflow: scroll;
   width: 80%;
 `;
 export const SideBar = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 200px;
+  width: 250px;
   border-right: 2px solid gray;
-  height: 100%;
+  min-height: 100%;
 `;
 export const List = styled.ul`
   padding: 0;
@@ -78,9 +86,18 @@ export const Row = styled.div`
   flex-direction: row;
 `;
 
-export const Input = styled.input``;
+export const Input = styled.input`
+  min-height: 30px;
+  padding: 5px;
+  margin: 2px;
+  border-radius: 5px;
+`;
 
-export const Button = styled.button``;
+export const Button = styled.button`
+  min-height: 40px;
+  margin: 2px;
+  border-radius: 5px;
+`;
 export const ErrorMessage = styled.div`
   opacity: 0;
   color: tomato;

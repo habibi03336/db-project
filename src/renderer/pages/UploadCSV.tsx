@@ -22,7 +22,7 @@ const UploadCSV = () => {
     }
   };
   return (
-    <Wrapper>
+    <Wrapper style={{ height: '100vh' }}>
       <Center>
         <BorderBox>
           <Item>

@@ -1,3 +1,5 @@
+import round from '../lib/round';
+
 export const numericTableOrdering = ({
   rowCount,
   name,
@@ -14,9 +16,9 @@ export const numericTableOrdering = ({
   typeCategory,
   type,
   nullCount,
-  nullCount / rowCount,
+  round(nullCount / rowCount, 2),
   zeroCount,
-  zeroCount / rowCount,
+  round(zeroCount / rowCount, 2),
   min,
   max,
   uniqueCount,
@@ -53,9 +55,9 @@ export const categoricTableOrdering = ({
   typeCategory,
   type,
   nullCount,
-  nullCount / rowCount,
+  round(nullCount / rowCount, 2),
   specialCharCount,
-  specialCharCount / rowCount,
+  round(specialCharCount / rowCount, 2),
   uniqueCount,
   uniqueCount / rowCount > 0.9,
   fk === undefined || fk === null ? false : fk,
