@@ -118,7 +118,7 @@ const UpdateTable = () => {
             <Row>
               <Selection
                 description="결합키 설정하기"
-                options={['phone', 'ssn', 'email', 'car-number']}
+                options={['phone', 'ssn', 'email', 'car-number', 'ip', 'null']}
                 onChange={onSelectFK}
               />
             </Row>
