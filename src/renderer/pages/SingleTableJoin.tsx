@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Modal from 'renderer/components/Modal';
 import Selection from 'renderer/components/Selection';
 import Table from 'renderer/components/Table';
+
 import {
   BorderBox,
   Column,
@@ -11,6 +12,7 @@ import {
   Strong,
   Wrapper,
 } from 'renderer/CSScontainers';
+import round from 'renderer/lib/round';
 
 const SingleTableJoin = () => {
   const [search, setSearch] = useState('');
@@ -122,8 +124,8 @@ const SingleTableJoin = () => {
                   joinResult.targetFK,
                   selectedFk,
                   joinResult.rowCount,
-                  joinResult.rowCount / joinResult.sourceRowCount,
-                  joinResult.rowCount / joinResult.targetRowCount,
+                  round(joinResult.rowCount / joinResult.sourceRowCount, 2),
+                  round(joinResult.rowCount / joinResult.targetRowCount, 2),
                 ],
               ]}
             />
