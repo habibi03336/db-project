@@ -71,22 +71,26 @@ const TableDomainScan = () => {
       <Wrapper>
         <Modal show={showResult} onClose={() => setShowResult(false)}>
           {scanResult.numricColumnsResult.length > 0 && (
-            <Row>
-              <Strong>수치 속성</Strong>
+            <Column>
+              <Row>
+                <Strong>수치 속성</Strong>
+              </Row>
               <Table
                 headers={numericTableOrder}
                 rows={scanResult.numricColumnsResult}
               />
-            </Row>
+            </Column>
           )}
           {scanResult.categoricColumnsResult.length > 0 && (
-            <Row>
-              <Strong>범주 속성</Strong>
+            <Column>
+              <Row>
+                <Strong>범주 속성</Strong>
+              </Row>
               <Table
                 headers={categoricTableOrder}
                 rows={scanResult.categoricColumnsResult}
               />
-            </Row>
+            </Column>
           )}
         </Modal>
 
