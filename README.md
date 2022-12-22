@@ -47,11 +47,11 @@
 
 ### A-3. 테이블 속성 편집
 
-- [ ] 스캔된 테이블 중 하나를 선택한다. (readScanTable)
+- [x] 스캔된 테이블 중 하나를 선택한다. (readScanTable)
 
-- [x] 테이블의 속성을 삭제한다. (deleteFeature)
+- [ ] 테이블의 속성을 삭제한다. (deleteFeature)
 
-- [x] 테이블 속성의 타입을 변경한다. (modifyFeatureDataType)
+- [ ] 테이블 속성의 타입을 변경한다. (modifyFeatureDataType)
 
 - [ ] 결합키 후보속성과 표준결합키 사전의 값을 매핑한다. (mappingFK) - 테이블 속성 도메인 스캔 기능 재활용
 
