@@ -68,28 +68,29 @@ export default function (ipcMain: Electron.IpcMain): void {
 
       // change the type of the column to integer if all values are integer
       // can be determined by isInteger array
-      const res = await Promise.all(
-        headers.map(async (header, idx) => {
-          if (isInteger[idx]) {
-            // if all values are integer, change the type to integer
-            // add new column with int type
-            const addNewCol = `ALTER TABLE ${tableName} ADD ${headers[idx]}_int int`;
-            // update the new column with the old column
-            const updateNewCol = `UPDATE ${tableName} SET ${headers[idx]}_int = CAST(${headers[idx]} AS INT)`;
-            // drop the old column
-            const dropOldCol = `ALTER TABLE ${tableName} DROP ${headers[idx]}`;
-            // rename the new column
-            const renameNewCol = `ALTER TABLE ${tableName} CHANGE ${headers[idx]}_int ${headers[idx]} INT`;
+      headers.forEach(async (header, idx) => {
+        if (isInteger[idx]) {
+          // if all values are integer, change the type to integer
+          // add new column with int type
+          const addNewCol = `ALTER TABLE ${tableName}
+              ADD ${headers[idx]}_int int`;
+          // update the new column with the old column
+          const updateNewCol = `UPDATE ${tableName}
+                                  SET ${headers[idx]}_int = CAST(${headers[idx]} AS INT)`;
+          // drop the old column
+          const dropOldCol = `ALTER TABLE ${tableName}
+              DROP ${headers[idx]}`;
+          // rename the new column
+          const renameNewCol = `ALTER TABLE ${tableName}
+              CHANGE ${headers[idx]}_int ${headers[idx]} INT`;
 
-            await dbClient.sql(addNewCol);
-            await dbClient.sql(updateNewCol);
-            await dbClient.sql(dropOldCol);
-            await dbClient.sql(renameNewCol);
-          }
-          return null;
-        })
-      );
-    } catch {
+          await dbClient.sql(addNewCol);
+          await dbClient.sql(updateNewCol);
+          await dbClient.sql(dropOldCol);
+          await dbClient.sql(renameNewCol);
+        }
+      });
+    } catch (err) {
       return error('데이터 insert 중에 오류가 발생했습니다.');
     }
 
