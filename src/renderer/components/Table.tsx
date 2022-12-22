@@ -7,7 +7,15 @@ const TableRow = styled.tr``;
 const TableTh = styled.th``;
 const TableTd = styled.td``;
 
-const Table = ({ headers, rows }: { headers: string[]; rows: any[][] }) => {
+const Table = ({
+  headers,
+  rows,
+  onClickRow,
+}: {
+  headers: string[];
+  rows: any[][];
+  onClickRow?: (args: { [key: string]: any }) => void;
+}) => {
   return (
     <TableContainer>
       <TableHead>
@@ -19,7 +27,10 @@ const Table = ({ headers, rows }: { headers: string[]; rows: any[][] }) => {
       </TableHead>
       <TableBody>
         {rows.map((row) => (
-          <TableRow key={row[0]}>
+          <TableRow
+            key={row[0]}
+            onClick={() => onClickRow({ attrName: row[0] })}
+          >
             <TableTh>{row[0]}</TableTh>
             {row.slice(1).map((data, idx) => {
               let showingData = data;
@@ -32,5 +43,7 @@ const Table = ({ headers, rows }: { headers: string[]; rows: any[][] }) => {
     </TableContainer>
   );
 };
-
+Table.defaultProps = {
+  onClickRow: () => {},
+};
 export default Table;

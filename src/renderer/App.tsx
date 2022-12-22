@@ -2,7 +2,7 @@ import { MemoryRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import CSVUpload from './pages/UploadCSV';
 import TableDomainScan from './pages/TableDomainScan';
-import TableFeatureEdit from './pages/TableFeatureEdit';
+import TableFeatureEdit from './pages/tableFeatureEdit/TableFeatureEdit';
 import SingleTableJoin from './pages/SingleTableJoin';
 import MultiTableJoin from './pages/MultiTableJoin';
 import Result from './pages/Result';
@@ -61,7 +61,7 @@ export default function App() {
         <Routes>
           <Route path="/uploadCsv" element={<CSVUpload />} />
           <Route path="/tableDomainScan" element={<TableDomainScan />} />
-          <Route path="/tableFeatureEdit" element={<TableFeatureEdit />} />
+          <Route path="/tableFeatureEdit/*" element={<TableFeatureEdit />} />
           <Route path="/singleTableJoin" element={<SingleTableJoin />} />
           <Route path="/multipleTableJoin" element={<MultiTableJoin />} />
           <Route path="/result" element={<Result />} />

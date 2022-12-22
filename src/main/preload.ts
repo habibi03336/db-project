@@ -16,7 +16,8 @@ export type Channels =
   | 'showResult'
   | 'downloadResult'
   | 'isDBConnected'
-  | 'readScanTable';
+  | 'readScanTable'
+  | 'readScanResult';
 
 contextBridge.exposeInMainWorld('db', {
   command: {

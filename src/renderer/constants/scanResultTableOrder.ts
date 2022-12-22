@@ -2,10 +2,10 @@ export const numericTableOrdering = ({
   rowCount,
   name,
   typeCategory,
-  isFKcandidate,
+  fk,
   nullCount,
   type,
-  uniqueValueCount,
+  uniqueCount,
   min,
   max,
   zeroCount,
@@ -19,8 +19,9 @@ export const numericTableOrdering = ({
   zeroCount / rowCount,
   min,
   max,
-  uniqueValueCount,
-  isFKcandidate,
+  uniqueCount,
+  uniqueCount / rowCount > 0.9,
+  fk === undefined || fk === null ? false : fk,
 ];
 
 export const numericTableOrder = [
@@ -35,17 +36,18 @@ export const numericTableOrder = [
   '최대',
   '상이 수치값',
   '결합키 후보',
+  '결합키',
 ];
 
 export const categoricTableOrdering = ({
   name,
   typeCategory,
-  isFKcandidate,
+  fk,
   nullCount,
   rowCount,
   specialCharCount,
   type,
-  uniqueCategoryCount,
+  uniqueCount,
 }) => [
   name,
   typeCategory,
@@ -54,8 +56,9 @@ export const categoricTableOrdering = ({
   nullCount / rowCount,
   specialCharCount,
   specialCharCount / rowCount,
-  uniqueCategoryCount,
-  isFKcandidate,
+  uniqueCount,
+  uniqueCount / rowCount > 0.9,
+  fk === undefined || fk === null ? false : fk,
 ];
 
 export const categoricTableOrder = [
@@ -68,4 +71,5 @@ export const categoricTableOrder = [
   '특수문자 비율',
   '상이 범주값',
   '결합키 후보',
+  '결합키',
 ];

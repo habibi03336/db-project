@@ -1,14 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import {
-  BorderBox,
-  Column,
-  Item,
-  Modal,
-  ModalBody,
-  Row,
-  Wrapper,
-} from 'renderer/CSScontainers';
+import { BorderBox, Column, Item, Row, Wrapper } from 'renderer/CSScontainers';
 import DBstate from 'renderer/states/DBstate';
 import Table from 'renderer/components/Table';
 import {
@@ -17,6 +9,7 @@ import {
   numericTableOrder,
   numericTableOrdering,
 } from 'renderer/constants/scanResultTableOrder';
+import Modal from 'renderer/components/Modal';
 
 const TableDomainScan = () => {
   const dbState = useRecoilValue(DBstate);
@@ -65,37 +58,34 @@ const TableDomainScan = () => {
 
   return (
     <Wrapper>
-      {showResult && (
-        <Modal>
-          <ModalBody>
-            <Row
-              style={{ justifyContent: 'flex-end', fontSize: '2rem' }}
-              onClick={() => setShowResult(false)}
-            >
-              {' '}
-              X
-            </Row>
-            {scanResult.numricColumnsResult.length > 0 && (
-              <Row>
-                수치 속성
-                <Table
-                  headers={numericTableOrder}
-                  rows={scanResult.numricColumnsResult}
-                />
-              </Row>
-            )}
-            {scanResult.categoricColumnsResult.length > 0 && (
-              <Row>
-                범주 속성
-                <Table
-                  headers={categoricTableOrder}
-                  rows={scanResult.categoricColumnsResult}
-                />
-              </Row>
-            )}
-          </ModalBody>
-        </Modal>
-      )}
+      <Modal show={showResult} onClose={() => setShowResult(false)}>
+        <Row
+          style={{ justifyContent: 'flex-end', fontSize: '2rem' }}
+          onClick={() => setShowResult(false)}
+        >
+          {' '}
+          X
+        </Row>
+        {scanResult.numricColumnsResult.length > 0 && (
+          <Row>
+            수치 속성
+            <Table
+              headers={numericTableOrder}
+              rows={scanResult.numricColumnsResult}
+            />
+          </Row>
+        )}
+        {scanResult.categoricColumnsResult.length > 0 && (
+          <Row>
+            범주 속성
+            <Table
+              headers={categoricTableOrder}
+              rows={scanResult.categoricColumnsResult}
+            />
+          </Row>
+        )}
+      </Modal>
+
       <Column>
         {tables.map((table) => {
           return (

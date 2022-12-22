@@ -27,6 +27,7 @@ export const ListItem = styled.li`
 
 export const Column = styled.div`
   display: flex;
+  min-width: 300px;
   flex-direction: column;
 `;
 
@@ -35,7 +36,7 @@ export const BorderBox = styled.div`
   border-radius: 10px;
 `;
 
-export const Modal = styled.div`
+export const ModalContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -71,6 +72,7 @@ export const Item = styled.div`
 
 export const Row = styled.div`
   display: flex;
+  margin: 10px;
   flex-direction: row;
 `;
 
@@ -89,3 +91,8 @@ export const Center = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const Strong = styled.strong``;
+
+export const Selection = styled.select``;
+export const Option = styled.option``;
