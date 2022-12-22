@@ -1,13 +1,21 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
+export const ViewPort = styled.div`
   margin: 0;
   height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: row;
 `;
+
+export const Wrapper = styled.div`
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+`;
 export const Main = styled.div`
+  overflow: scroll;
   width: 80%;
 `;
 export const SideBar = styled.div`
@@ -15,7 +23,7 @@ export const SideBar = styled.div`
   flex-direction: column;
   width: 250px;
   border-right: 2px solid gray;
-  height: 100%;
+  min-height: 100%;
 `;
 export const List = styled.ul`
   padding: 0;

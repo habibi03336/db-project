@@ -85,65 +85,73 @@ const UpdateTable = () => {
   };
 
   return (
-    <Wrapper>
-      <Modal
-        show={selectedAttr.length !== 0}
-        onClose={() => {
-          setSelectedAttr([]);
-        }}
-      >
-        <Column style={{ width: '100%' }}>
-          <Row>
-            <Strong>{selectedAttr[0]}</Strong>
-          </Row>
-          <Row>
-            <Button onClick={onDeleteFeature}>속성 삭제하기</Button>
-          </Row>
-          <Row>
-            <Selection
-              description="속성 변경하기"
-              options={
-                selectedAttr[1] === 'numeric' ? ['text', 'varchar'] : ['int']
-              }
-              onChange={onChangeType}
-            />
-          </Row>
-          <Row>
-            <Selection
-              description="결합키 설정하기"
-              options={['phone', 'ssn', 'email', 'car-number']}
-              onChange={onSelectFK}
-            />
-          </Row>
+    <>
+      <Row style={{ padding: '15px' }}>
+        <Strong>
+          스캔 결과입니다. 속성을 클릭하여 업데이트 할 수 있습니다.
+        </Strong>
+      </Row>
+
+      <Wrapper>
+        <Modal
+          show={selectedAttr.length !== 0}
+          onClose={() => {
+            setSelectedAttr([]);
+          }}
+        >
+          <Column style={{ width: '100%' }}>
+            <Row>
+              <Strong>{selectedAttr[0]}</Strong>
+            </Row>
+            <Row>
+              <Button onClick={onDeleteFeature}>속성 삭제하기</Button>
+            </Row>
+            <Row>
+              <Selection
+                description="속성 변경하기"
+                options={
+                  selectedAttr[1] === 'numeric' ? ['text', 'varchar'] : ['int']
+                }
+                onChange={onChangeType}
+              />
+            </Row>
+            <Row>
+              <Selection
+                description="결합키 설정하기"
+                options={['phone', 'ssn', 'email', 'car-number']}
+                onChange={onSelectFK}
+              />
+            </Row>
+          </Column>
+        </Modal>
+        <Column>
+          {scanResult.numericColumnsResult.length > 0 && (
+            <Row>
+              <BorderBox>
+                <Strong>수치 속성</Strong>
+                <Table
+                  headers={numericTableOrder}
+                  rows={scanResult.numericColumnsResult}
+                  onClickRow={onClickRow}
+                />
+              </BorderBox>
+            </Row>
+          )}
+          {scanResult.categoricColumnsResult.length > 0 && (
+            <Row>
+              <BorderBox>
+                <Strong>범주 속성</Strong>
+                <Table
+                  headers={categoricTableOrder}
+                  rows={scanResult.categoricColumnsResult}
+                  onClickRow={onClickRow}
+                />
+              </BorderBox>
+            </Row>
+          )}
         </Column>
-      </Modal>
-      <Column>
-        {scanResult.numericColumnsResult.length > 0 && (
-          <Row>
-            <BorderBox>
-              수치 속성
-              <Table
-                headers={numericTableOrder}
-                rows={scanResult.numericColumnsResult}
-                onClickRow={onClickRow}
-              />
-            </BorderBox>
-          </Row>
-        )}
-        {scanResult.categoricColumnsResult.length > 0 && (
-          <Row>
-            <BorderBox>
-              범주 속성
-              <Table
-                headers={categoricTableOrder}
-                rows={scanResult.categoricColumnsResult}
-                onClickRow={onClickRow}
-              />
-            </BorderBox>
-          </Row>
-        )}
-      </Column>
-    </Wrapper>
+      </Wrapper>
+    </>
   );
 };
 

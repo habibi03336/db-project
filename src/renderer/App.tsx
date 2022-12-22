@@ -16,6 +16,7 @@ import {
   Main,
   Center,
   BorderBox,
+  ViewPort,
 } from './CSScontainers';
 import isLoginState from './states/isLogin';
 import Login from './pages/Login';
@@ -24,15 +25,15 @@ export default function App() {
   const isLogin = useRecoilValue(isLoginState);
   if (!isLogin) {
     return (
-      <Wrapper>
+      <ViewPort>
         <Center>
           <Login />
         </Center>
-      </Wrapper>
+      </ViewPort>
     );
   }
   return (
-    <Wrapper>
+    <ViewPort>
       <SideBar>
         <List>
           <ListItem>
@@ -76,6 +77,6 @@ export default function App() {
           <Route path="/result" element={<Result />} />
         </Routes>
       </Main>
-    </Wrapper>
+    </ViewPort>
   );
 }

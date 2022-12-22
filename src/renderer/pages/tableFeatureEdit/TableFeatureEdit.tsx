@@ -1,4 +1,5 @@
 import { MemoryRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Row, Strong } from 'renderer/CSScontainers';
 import ShowScannedTable from './ShowScannedTable';
 import UpdateTable from './UpdateTable';
 

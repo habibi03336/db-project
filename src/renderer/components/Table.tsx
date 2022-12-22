@@ -1,11 +1,29 @@
 import styled from 'styled-components';
 
-const TableContainer = styled.table``;
-const TableHead = styled.thead``;
-const TableBody = styled.tbody``;
-const TableRow = styled.tr``;
-const TableTh = styled.th``;
-const TableTd = styled.td``;
+const TableContainer = styled.table`
+  border: 2px solid gray;
+  padding: 5px;
+`;
+const TableHead = styled.thead`
+  border: 2px solid gray;
+  padding: 5px;
+`;
+const TableBody = styled.tbody`
+  border: 2px solid gray;
+  padding: 5px;
+`;
+const TableRow = styled.tr`
+  border: 2px solid gray;
+  padding: 5px;
+`;
+const TableTh = styled.th`
+  border: 2px solid gray;
+  padding: 5px;
+`;
+const TableTd = styled.td`
+  border: 2px solid gray;
+  padding: 5px;
+`;
 
 const Table = ({
   headers,

@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { BorderBox, Column, Item, Row, Wrapper } from 'renderer/CSScontainers';
+import {
+  BorderBox,
+  Column,
+  Item,
+  Row,
+  Strong,
+  Wrapper,
+} from 'renderer/CSScontainers';
 import DBstate from 'renderer/states/DBstate';
 import Table from 'renderer/components/Table';
 import {
@@ -57,46 +64,51 @@ const TableDomainScan = () => {
   };
 
   return (
-    <Wrapper>
-      <Modal show={showResult} onClose={() => setShowResult(false)}>
-        {scanResult.numricColumnsResult.length > 0 && (
-          <Row>
-            수치 속성
-            <Table
-              headers={numericTableOrder}
-              rows={scanResult.numricColumnsResult}
-            />
-          </Row>
-        )}
-        {scanResult.categoricColumnsResult.length > 0 && (
-          <Row>
-            범주 속성
-            <Table
-              headers={categoricTableOrder}
-              rows={scanResult.categoricColumnsResult}
-            />
-          </Row>
-        )}
-      </Modal>
+    <div>
+      <Row style={{ padding: '15px' }}>
+        <Strong>스캔 가능한 테이블 목록입니다.</Strong>
+      </Row>
+      <Wrapper>
+        <Modal show={showResult} onClose={() => setShowResult(false)}>
+          {scanResult.numricColumnsResult.length > 0 && (
+            <Row>
+              <Strong>수치 속성</Strong>
+              <Table
+                headers={numericTableOrder}
+                rows={scanResult.numricColumnsResult}
+              />
+            </Row>
+          )}
+          {scanResult.categoricColumnsResult.length > 0 && (
+            <Row>
+              <Strong>범주 속성</Strong>
+              <Table
+                headers={categoricTableOrder}
+                rows={scanResult.categoricColumnsResult}
+              />
+            </Row>
+          )}
+        </Modal>
 
-      <Column>
-        {tables.map((table) => {
-          return (
-            <Item key={table.table_name} onClick={() => onClickTable(table)}>
-              <Column>
-                <BorderBox>
-                  <Item>테이블 명: {table.table_name}</Item>
-                  <Row>
-                    <Item>속성 개수: {table.column_name.length}개</Item>
-                    <Item>레코드 수: {String(table.table_rows)}개</Item>
-                  </Row>
-                </BorderBox>
-              </Column>
-            </Item>
-          );
-        })}
-      </Column>
-    </Wrapper>
+        <Column>
+          {tables.map((table) => {
+            return (
+              <Item key={table.table_name} onClick={() => onClickTable(table)}>
+                <Column>
+                  <BorderBox>
+                    <Item>테이블 명: {table.table_name}</Item>
+                    <Row>
+                      <Item>속성 개수: {table.column_name.length}개</Item>
+                      <Item>레코드 수: {String(table.table_rows)}개</Item>
+                    </Row>
+                  </BorderBox>
+                </Column>
+              </Item>
+            );
+          })}
+        </Column>
+      </Wrapper>
+    </div>
   );
 };
 
