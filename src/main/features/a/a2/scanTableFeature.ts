@@ -110,13 +110,13 @@ export default function (ipcMain: Electron.IpcMain): void {
       )) as Array<any>;
       if (checkRow.length !== 0) {
         const deleteSql1 = `delete from SCANNED_TABLE where table_name = '${tableName}'`;
-        const deleteSql2 = `delete from ATTRIBUTES_OF_TABLES where table_name = '${tableName}'`;
-        const deleteSql3 = `delete from NUMERIC_ATTRIBUTES where table_name = '${tableName}'`;
-        const deleteSql4 = `delete from CATEGORIC_ATTRIBUTES where table_name = '${tableName}'`;
+        // const deleteSql2 = `delete from ATTRIBUTES_OF_TABLES where table_name = '${tableName}'`;
+        // const deleteSql3 = `delete from NUMERIC_ATTRIBUTES where table_name = '${tableName}'`;
+        // const deleteSql4 = `delete from CATEGORIC_ATTRIBUTES where table_name = '${tableName}'`;
         await localDBclient.sql(deleteSql1);
-        await localDBclient.sql(deleteSql2);
-        await localDBclient.sql(deleteSql3);
-        await localDBclient.sql(deleteSql4);
+        // await localDBclient.sql(deleteSql2);
+        // await localDBclient.sql(deleteSql3);
+        // await localDBclient.sql(deleteSql4);
       }
 
       const insertNewTableSql = `insert into SCANNED_TABLE values('${tableName}', ${rowCount})`;

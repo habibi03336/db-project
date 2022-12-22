@@ -24,6 +24,8 @@ export default function makeConnection(ipcMain: Electron.IpcMain): void {
         );
       }
       localDBclient.initialize(dbClient.getFilePath());
+      // should set PRAGMA foreign_keys = ON;
+      await localDBclient.sql('PRAGMA foreign_keys = ON');
       return success('db연결 성공');
     } catch (e) {
       console.log(e);
