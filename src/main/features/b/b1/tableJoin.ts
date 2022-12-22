@@ -34,7 +34,7 @@ export default function (ipcMain: Electron.IpcMain): void {
       const res2 = await localDBclient.select(findTargetFKSql);
       const targetFKname = res2[0].attribute_name;
 
-      const joinSql = `select * from ${sourceT} as s, ${targetT} as t where s.${sourceFKname} = t.${targetFKname}`;
+      const joinSql = `select s.${sourceFKname} from ${sourceT} as s, ${targetT} as t where s.${sourceFKname} = t.${targetFKname}`;
       const res3 = await dbClient.sql(joinSql);
 
       const sourceRowCountSql = `select row_num_count from SCANNED_TABLE where table_name = '${sourceT}'`;
