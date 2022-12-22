@@ -8,7 +8,7 @@ export default function (ipcMain: Electron.IpcMain): void {
     try {
       const { tableName, columnName, FKname } = arg[0];
       // update scan table file
-      const updateAttributeSql = `update from ATTRIBUTES_OF_TABLES set referece_key = ${FKname} where table_name = ${tableName} and attribute_name = ${columnName}`;
+      const updateAttributeSql = `update ATTRIBUTES_OF_TABLES set reference_key = '${FKname}' where table_name = '${tableName}' and attribute_name = '${columnName}'`;
       await localDBclient.sql(updateAttributeSql);
       return success();
     } catch (err) {
