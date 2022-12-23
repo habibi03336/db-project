@@ -1,14 +1,17 @@
 # 데이터베이스 프로젝트 \[2022-2\]
 
-## 파일 데이터
+## 시연영상
+
+[![DB프로젝트 시연영상](https://i9.ytimg.com/vi_webp/qML20ns51SY/mq2.webp?sqp=CMSLlJ0G-oaymwEmCMACELQB8quKqQMa8AEB-AHOCYAC0AWKAgwIABABGFkgWShZMA8=&rs=AOn4CLArBdM_ko2I_bGP_lPQbKOR0wku6Q)](https://www.youtube.com/watch?v=qML20ns51SY)
+
+## 어플리케이션 데이터
+
+어플리케이션 데이터를 sqlite DB를 활용하여 관리한다.
+host, port, database를 키로 하여 sqlite DB를 생성하고 내부적으로 RDB로 테이블과 어트리뷰트 관련 데이터를 관리한다.
 
 <p align="center">
-  <img src="./fileData.png?raw=true" width="100%" title="파일 데이터 구조">
+  <img src="./schema.PNG?raw=true" width="100%" title="RDB 스키마">
 </p>
-
-1. 표준 대표속성 사전 & 해당 대표속성을 가지는 테이블
-2. 테이블 스캔 결과
-3. 테이블 조인 결과
 
 ## 기능목록
 
@@ -27,7 +30,7 @@
   - 공통
 
     - [x] 속성의 data type을 보여준다. (sql 기능 이용)
-    - [ ] NULL 레코드 수, NULL 레코드 비율을 보여준다. (lib/nullCount)
+    - [x] NULL 레코드 수, NULL 레코드 비율을 보여준다. (lib/nullCount)
     - [x] 중복되는 레코드 비율이 10% 미만인 속성을 결합 키 후보로 설정한다. (uniqueValueCount, uniqueCatogoryCount 활용하여 구현)
 
   - 수치 속성의 경우
@@ -43,7 +46,7 @@
 
 - [x] 결합 키 후보 속성과 표준 결합키 사전의 값을 매핑하고, 파일 데이터를 업데이트한다. (mappingFK)
 
-- [ ] 대표 속성과 표준 대표속성을 매핑한다. (mappingPK)
+<!-- - [ ] 대표 속성과 표준 대표속성을 매핑한다. (mappingPK) -->
 
 ### A-3. 테이블 속성 편집
 
@@ -51,11 +54,11 @@
 
 - [x] 선택된 테이블의 스캔 결과를 받는다. (readScanResult)
 
-- [ ] 테이블의 속성을 삭제한다. (deleteFeature)
+- [x] 테이블의 속성을 삭제한다. (deleteFeature)
 
-- [ ] 테이블 속성의 타입을 변경한다. (modifyFeatureDataType)
+- [x] 테이블 속성의 타입을 변경한다. (modifyFeatureDataType)
 
-- [ ] 결합키 후보속성과 표준결합키 사전의 값을 매핑한다. (mappingFK) - 테이블 속성 도메인 스캔 기능 재활용
+- [x] 결합키 후보속성과 표준결합키 사전의 값을 매핑한다. (mappingFK) - 테이블 속성 도메인 스캔 기능 재활용
 
 ### B-1. 단일 결합
 
@@ -71,7 +74,7 @@
 
   - [x] 결과 레코드 수, 결합 성공률\_w1, 결합 성공률 5 \_w2, 결합 테이블명을 보여준다.
 
-### B-2. 다중 결합
+<!-- ### B-2. 다중 결합
 
 - [ ] 선택된 테이블에 대하여 결합을 진행할 수 있는 테이블을 보여준다 - 단일 결합 기능 재활용(findTableJoinCandidate)
 
@@ -81,7 +84,7 @@
 
 - [ ] 저장된 테이블 스캔 결과, 단일 테이블 결합 수행결과, 다중 테이블 결합 수행결과를 보여 준다. (showResult)
 
-- [ ] 저장된 결과를 다운로드 받을 수 있게 해준다. (downloadResult)
+- [ ] 저장된 결과를 다운로드 받을 수 있게 해준다. (downloadResult) -->
 
 ---
 
