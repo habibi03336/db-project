@@ -64,7 +64,7 @@ export default function (ipcMain: Electron.IpcMain): void {
         });
 
         // update the data type of the column in ATTRIBUTES_OF_TABLE and following NUMERIC_ATTRIBUTES or CATEGORIC_ATTRIBUTES
-        const updateType = `update ATTRIBUTES_OF_TABLES set data_type = ${colType} where table_name = '${modTable}' and attribute_name = '${colName}'`;
+        const updateType = `update ATTRIBUTES_OF_TABLES set data_type = '${colType}' where table_name = '${modTable}' and attribute_name = '${colName}'`;
         // delete the column from NUMERIC_ATTRIBUTES and insert it into CATEGORIC_ATTRIBUTES
         const deleteNumeric = `delete from NUMERIC_ATTRIBUTES where table_name = '${modTable}' and attribute_name = '${colName}'`;
         const insertCategoric = `insert into CATEGORIC_ATTRIBUTES values ('${modTable}', '${colName}', 0)`; // 0 means the column has no special characters because it is converted from numeric to text
@@ -126,7 +126,7 @@ export default function (ipcMain: Electron.IpcMain): void {
           });
 
           // update the data type of the column in ATTRIBUTES_OF_TABLE and following NUMERIC_ATTRIBUTES or CATEGORIC_ATTRIBUTES
-          const updateType = `update ATTRIBUTES_OF_TABLES set data_type = ${colType} where table_name = '${modTable}' and attribute_name = '${colName}'`;
+          const updateType = `update ATTRIBUTES_OF_TABLES set data_type = '${colType}' where table_name = '${modTable}' and attribute_name = '${colName}'`;
           // delete the column from NUMERIC_ATTRIBUTES and insert it into CATEGORIC_ATTRIBUTES
           const deleteCategoric = `delete from CATEGORIC_ATTRIBUTES where table_name = '${modTable}' and attribute_name = '${colName}'`;
           const insertNumeric = `insert into NUMERIC_ATTRIBUTES values ('${modTable}', '${colName}', 0)`; // 0 means the column has no special characters because it is converted from numeric to text
